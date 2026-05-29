@@ -1,61 +1,65 @@
-﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.EntityFrameworkCore;
+using TallerMecanico.Library.Core.Entities;
+using TallerMecanico.Library.Infrastructure.Data;
 
-namespace PC1_22200133_24100302.Controllers
+namespace PC1_22200133_24100302.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TipoServicioController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TipoServicioController : ControllerBase
+    private readonly TallerMecanicoContext _context;
+
+    public TipoServicioController(TallerMecanicoContext context)
     {
-        private readonly ITipoServicioRepository _tipoServicioRepository;
-        public TipoServicioController(ITipoServicioRepository tipoServicioRepository)
-        {
-            _tipoServicioRepository = tipoServicioRepository;
-        }
+        _context = context;
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTipoServicio()
-        {
-            var tipoServicios = await _tipoServicioRepository.GetTipoServicio();
-            return Ok(tipoServicios);
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var lista = await _context.TipoServicios.ToListAsync();
+        return Ok(lista);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTipoServicioById(int id)
-        {
-            var tipoServicio = await _tipoServicioRepository.GetTipoServicioById(id);
-            if (tipoServicio == null)
-            {
-                return NotFound();
-            }
-            return Ok(tipoServicio);
-        }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var tipoServicio = await _context.TipoServicios.FindAsync(id);
+        if (tipoServicio == null) return NotFound();
+        return Ok(tipoServicio);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateTipoServicio(TipoServicio tipoServicio)
-        {
-            await _tipoServicioRepository.CreateTipoServicio(tipoServicio);
-            return CreatedAtAction(nameof(GetTipoServicioById), new { id = tipoServicio.Id }, tipoServicio);
-        }
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] TipoServicio tipoServicio)
+    {
+        _context.TipoServicios.Add(tipoServicio);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetById), new { id = tipoServicio.Id }, tipoServicio);
+    }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTipoServicio(int id)
-        {
-            await _tipoServicioRepository.DeleteTipoServicio(id);
-            return NoContent();
-        }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] TipoServicio tipoServicio)
+    {
+        var existing = await _context.TipoServicios.FindAsync(id);
+        if (existing == null) return NotFound();
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTipoServicio(int id, TipoServicio tipoServicio)
-        {
-            if (id != tipoServicio.Id)
-            {
-                return BadRequest();
-            }
-            await _tipoServicioRepository.UpdateTipoServicio(tipoServicio);
-            return NoContent();
-        }
+        existing.Nombre = tipoServicio.Nombre;
+        existing.PrecioBase = tipoServicio.PrecioBase;
 
+        await _context.SaveChangesAsync();
+        return Ok(existing);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var tipoServicio = await _context.TipoServicios.FindAsync(id);
+        if (tipoServicio == null) return NotFound();
+
+        _context.TipoServicios.Remove(tipoServicio);
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 }
