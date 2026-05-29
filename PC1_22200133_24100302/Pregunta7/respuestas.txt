@@ -33,7 +33,8 @@ c. Buenas practicas implementadas y por que:
 
 d. Uso de herramientas de IA:
 
-Si, use Claude (de Anthropic) como apoyo durante toda la practica. Principalmente para:
+Si, usamos Claude (de Anthropic) como apoyo durante toda la practica. Principalmente para:
+- Guia para la estructura de la base de datos
 - Generar la estructura inicial del proyecto y los archivos de codigo base.
 - Revisar que la sintaxis de Entity Framework Core estuviera correcta.
 - Generar la coleccion de Postman en formato JSON.
