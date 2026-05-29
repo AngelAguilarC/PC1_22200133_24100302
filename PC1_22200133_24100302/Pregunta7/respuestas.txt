@@ -14,7 +14,7 @@ lo corregi revisando el formato correcto para localdb.
 b. Diferencias entre controlador autogenerado y con repository. Enfoque preferido:
 
 El controlador autogenerado (TipoServicio) es mas simple porque accede directamente al DbContext,
-lo que lo hace rapido de implementar pero mezcla la logica de acceso a datos con la capa de presentacion.
+lo que lo hace rapido de implementar.
 El controlador con repository (OrdenServicio) esta mejor organizado porque separa responsabilidades:
 el controlador solo maneja HTTP, el service maneja la logica del negocio y el repository maneja
 el acceso a datos. Aunque requiere mas archivos, es mas facil de mantener y de hacer pruebas unitarias.
@@ -33,10 +33,5 @@ c. Buenas practicas implementadas y por que:
 
 d. Uso de herramientas de IA:
 
-Si, usamos Claude (de Anthropic) como apoyo durante toda la practica. Principalmente para:
-- Guia para la estructura de la base de datos
-- Generar la estructura inicial del proyecto y los archivos de codigo base.
-- Revisar que la sintaxis de Entity Framework Core estuviera correcta.
-- Generar la coleccion de Postman en formato JSON.
-La IA ayudo a acelerar el desarrollo, pero tuve que revisar y adaptar el codigo al contexto
-especifico del proyecto.
+Si, use como apoyo durante la practica. Principalmente para:
+- Generar la estructura inicial del proyecto, apoyarme en la generación de la BD.
